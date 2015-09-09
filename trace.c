@@ -807,6 +807,8 @@ write_insn(FILE *stream, EntryHeader *eh)
                 stream);
         num_elems_written += fwrite(&(eh->num_operands),
                 sizeof(eh->num_operands), 1, stream);
+        num_elems_written += fwrite(&(eh->num_poperands),
+                        sizeof(eh->num_poperands), 1, stream);
         num_elems_written += fwrite(&(eh->tp), sizeof(eh->tp), 1, stream);
         num_elems_written += fwrite(&(eh->eflags), sizeof(eh->eflags), 1,
                 stream);
@@ -817,7 +819,7 @@ write_insn(FILE *stream, EntryHeader *eh)
         /* Write rawbytes */
         num_elems_written += fwrite(&(eh->rawbytes), eh->inst_size, 1, stream);
 
-        /* Write remaining operands */
+        /* Write remaining pre operands */
         int i = 0, j = 0;
         while ((eh->operand[i].type != TNone) && (i < MAX_NUM_OPERANDS))
         {
@@ -836,6 +838,28 @@ write_insn(FILE *stream, EntryHeader *eh)
                     }
                 }
             }
+            i++;
+        }
+
+        // write post operand
+        i = 0;//, j = 0;
+        while ((eh->poperand[i].type != TNone) && (i < MAX_NUM_OPERANDS))
+        {
+            write_operand(stream, eh->poperand[i]);
+
+//            /* For Memory operands, need to write memregs and segent's */
+//            if ((eh->poperand[i].type == TMemLoc)
+//                    || (eh->poperand[i].type == TMemAddress))
+//            {
+//                /* Write Memregs operands */
+//                for (j = 0; j < MAX_NUM_MEMREGS; j++)
+//                {
+//                    if (eh->memregs[i][j].type != TNone)
+//                    {
+//                        write_operand(stream, eh->memregs[i][j]);
+//                    }
+//                }
+//            }
             i++;
         }
 

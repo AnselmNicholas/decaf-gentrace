@@ -379,6 +379,8 @@ void tracing_insn_end(DECAF_Callback_Params* params) {
 		update_written_operands(&eh);
 	}
 
+	include_written_operands(&eh);
+
 	/* If not writing to trace, or instruction already written, return */
 	if (skip_trace_write || (insn_already_written == 1))
 		return;

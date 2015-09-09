@@ -15,6 +15,7 @@ extern "C" {
 #endif // __cplusplus
 
 void update_written_operands (EntryHeader *eh);
+void include_written_operands (EntryHeader *eh);
 
 #ifdef __cplusplus
 }
